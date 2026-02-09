@@ -1,0 +1,43 @@
+@startuml
+' Diagramme de classes simplifié pour JavaStocks
+class Article {
+  - id : int
+  - libelle : String
+  - quantite : int
+  - categorie : String
+  - sl : boolean
+}
+class Textile extends Article {
+  - taille : String
+  - couleur : String
+}
+class Boisson extends Article {
+  - volume : int
+}
+class DenreeSeche extends Article {
+  - poids : int
+}
+class Coureur {
+  - id : int
+  - nom : String
+  - prenom : String
+}
+class TypeEpreuve {
+  - id : int
+  - libelle : String
+}
+class Reservation {
+  - id : int
+  - date : Date
+}
+class ReservationArticle {
+  - quantite : int
+}
+Article <|-- Textile
+Article <|-- Boisson
+Article <|-- DenreeSeche
+Reservation "1" -- "*" ReservationArticle
+Article "1" -- "*" ReservationArticle
+Coureur "1" -- "*" Reservation
+TypeEpreuve "1" -- "*" Reservation
+@enduml

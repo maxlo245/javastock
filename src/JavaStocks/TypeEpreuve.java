@@ -4,7 +4,7 @@ public class TypeEpreuve {
     private int id;
     private String libelle;
 
-        // ...déplacé dans JavaStocks...
+    public TypeEpreuve(int id, String libelle) {
         this.id = id;
         this.libelle = libelle;
     }

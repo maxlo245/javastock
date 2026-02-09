@@ -12,6 +12,7 @@ JavaStocks\ArticleDAO.class
 JavaStocks\ReservationArticle.class
 JavaStocks\Coureur.class
 JavaStocks\Reservation.class
+JavaStocks\TestSwing.class
 JavaStocks\Boisson.class
 JavaStocks\ArticleMenu.class
 JavaStocks\MainMenu.class

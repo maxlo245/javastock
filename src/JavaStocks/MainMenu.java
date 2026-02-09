@@ -3,6 +3,11 @@ package JavaStocks;
 public class MainMenu {
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> {
+            java.util.List<String> articles = new java.util.ArrayList<>();
+            articles.add("T-shirt L vert (Textile) - 10");
+            articles.add("Bouteille 50cl (Boisson) - 6");
+            articles.add("Barre énergétique 250g (Denrée sèche) - 12");
+
             javax.swing.JFrame frame = new javax.swing.JFrame("Menu Principal");
             frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 350);
@@ -28,22 +33,29 @@ public class MainMenu {
                 int choix = menuList.getSelectedIndex() + 1;
                 switch (choix) {
                     case 1:
-                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des articles (à implémenter)");
+                        // Gestion des articles en mémoire
+                        javax.swing.JTextArea area = new javax.swing.JTextArea();
+                        StringBuilder sb = new StringBuilder();
+                        for (String art : articles) sb.append(art).append("\n");
+                        area.setText(sb.toString());
+                        area.setEditable(false);
+                        javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(area);
+                        javax.swing.JOptionPane.showMessageDialog(frame, scroll, "Articles (démo hors-ligne)", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                         break;
                     case 2:
-                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des coureurs (à implémenter)");
+                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des coureurs (démo hors-ligne)");
                         break;
                     case 3:
-                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des types d'épreuve (à implémenter)");
+                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des types d'épreuve (démo hors-ligne)");
                         break;
                     case 4:
-                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des réservations (à implémenter)");
+                        javax.swing.JOptionPane.showMessageDialog(frame, "Gestion des réservations (démo hors-ligne)");
                         break;
                     case 5:
-                        javax.swing.JOptionPane.showMessageDialog(frame, "Fonctionnalité à venir.");
+                        javax.swing.JOptionPane.showMessageDialog(frame, "Aucune rupture détectée (démo hors-ligne)");
                         break;
                     case 6:
-                        javax.swing.JOptionPane.showMessageDialog(frame, "Fonctionnalité à venir.");
+                        javax.swing.JOptionPane.showMessageDialog(frame, "Historique non disponible en mode démo");
                         break;
                     case 7:
                         frame.dispose();
@@ -63,5 +75,4 @@ public class MainMenu {
             frame.setVisible(true);
         });
     }
-        // ...déplacé dans JavaStocks...
 }
