@@ -3,7 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 public class DatabaseConnection {
-    private static final String URL = "jdbc:postgresql://localhost:5432/javastock";
+    private static final String URL = "jdbc:postgresql://localhost:5432/javastocks";
     private static final String USER = "admin";
     private static final String PASSWORD = "root";
     private static Connection connection = null;

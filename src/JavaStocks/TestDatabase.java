@@ -2,6 +2,12 @@ package JavaStocks;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import JavaStocks.CoureurDAO;
+import JavaStocks.Coureur;
+import JavaStocks.ArticleDAO;
+import JavaStocks.Article;
+import JavaStocks.TypeEpreuveDAO;
+import JavaStocks.TypeEpreuve;
 public class TestDatabase {
     public static void main(String[] args) {
         System.out.println("=== Test de la base de donnees javastock ===\n");
