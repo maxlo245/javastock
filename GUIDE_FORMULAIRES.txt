@@ -1,0 +1,119 @@
+﻿╔══════════════════════════════════════════════════════════════╗
+║         JAVASTOCK - GUIDE D'UTILISATION                      ║
+║              FORMULAIRES CLIENT                              ║
+╚══════════════════════════════════════════════════════════════╝
+✅ IMPLEMENTATION TERMINEE - LES AJOUTS FONCTIONNENT!
+═══════════════════════════════════════════════════════════════
+📝 FORMULAIRES DISPONIBLES
+═══════════════════════════════════════════════════════════════
+1️⃣  FORMULAIRE ARTICLE
+   ┌─────────────────────────────────────────────┐
+   │ • Libellé: [Champ texte]                    │
+   │ • Catégorie: [Menu déroulant]               │
+   │   - Textile                                 │
+   │   - Boisson                                 │
+   │   - Denrée Sèche                            │
+   │ • Quantité: [Nombre]                        │
+   │ • Bouton: [ENVOYER] ✅                      │
+   └─────────────────────────────────────────────┘
+   ➜ Enregistre directement dans la base
+   ➜ Message de confirmation après ajout
+   ➜ Formulaire réinitialisé automatiquement
+2️⃣  FORMULAIRE COUREUR
+   ┌─────────────────────────────────────────────┐
+   │ • Nom: [Champ texte]                        │
+   │ • Prénom: [Champ texte]                     │
+   │ • Bouton: [ENVOYER] ✅                      │
+   └─────────────────────────────────────────────┘
+   ➜ Validation des champs obligatoires
+   ➜ Sauvegarde immédiate en base
+   ➜ Confirmation visuelle
+3️⃣  FORMULAIRE TYPE D'ÉPREUVE
+   ┌─────────────────────────────────────────────┐
+   │ • Libellé: [Champ texte]                    │
+   │   (ex: Marathon, 10km, Trail...)            │
+   │ • Bouton: [ENVOYER] ✅                      │
+   └─────────────────────────────────────────────┘
+   ➜ Simple et rapide
+   ➜ Enregistrement instantané
+4️⃣  FORMULAIRE RÉSERVATION (Complet)
+   ┌─────────────────────────────────────────────┐
+   │ • Date: [Automatique - aujourd'hui]         │
+   │ • Coureur: [Sélection liste]                │
+   │ • Type d'épreuve: [Sélection liste]         │
+   │ • Article: [Sélection liste]                │
+   │ • Quantité: [Spinner +/-]                   │
+   │ • [+ Ajouter cet article]                   │
+   │ • Liste articles sélectionnés               │
+   │ • Bouton: [ENVOYER] ✅                      │
+   └─────────────────────────────────────────────┘
+   ➜ Multi-articles possible
+   ➜ Affichage disponibilité en temps réel
+   ➜ Validation complète avant envoi
+═══════════════════════════════════════════════════════════════
+🚀 COMMENT UTILISER
+═══════════════════════════════════════════════════════════════
+ÉTAPE 1: Lancer l'application
+   → Double-cliquez sur run.bat
+   → Le Menu Principal s'ouvre
+ÉTAPE 2: Sélectionner une catégorie
+   → Cliquez sur "Gestion des articles" (ou autre)
+   → Cliquez sur [Valider]
+ÉTAPE 3: Remplir le formulaire
+   → Complétez tous les champs obligatoires
+   → Les champs vides affichent une erreur
+ÉTAPE 4: Envoyer
+   → Cliquez sur le bouton vert [ENVOYER]
+   → Message de confirmation s'affiche
+   → Données sauvegardées en base PostgreSQL
+ÉTAPE 5: Continuer ou Fermer
+   → Le formulaire se réinitialise automatiquement
+   → Vous pouvez ajouter un autre élément
+   → Ou cliquez sur [Fermer] pour revenir au menu
+═══════════════════════════════════════════════════════════════
+🎯 FONCTIONNALITÉS
+═══════════════════════════════════════════════════════════════
+✅ Formulaires client avec champs à remplir
+✅ Bouton "Envoyer" qui sauvegarde en base
+✅ Validation des données saisies
+✅ Messages d'erreur clairs
+✅ Confirmation de succès après envoi
+✅ Réinitialisation automatique du formulaire
+✅ Bouton "Réinitialiser" pour vider les champs
+✅ Bouton "Fermer" pour revenir au menu
+✅ Design professionnel avec bouton vert
+═══════════════════════════════════════════════════════════════
+📊 STATUT DE LA BASE DE DONNÉES
+═══════════════════════════════════════════════════════════════
+Base: javastock
+Connexion: localhost:5432
+User: admin
+Status: ✅ Connecté et opérationnel
+Tables actives:
+  • article
+  • coureur
+  • type_epreuve
+  • reservation
+  • reservation_article
+═══════════════════════════════════════════════════════════════
+🎨 CARACTÉRISTIQUES DESIGN
+═══════════════════════════════════════════════════════════════
+• Titre en gras au-dessus de chaque formulaire
+• Labels alignés à gauche des champs
+• Champs de saisie larges et lisibles
+• Bouton "Envoyer" en vert pour attirer l'œil
+• Espacement agréable entre les éléments
+• Taille de fenêtre adaptée au contenu
+• Messages de confirmation/erreur popup
+═══════════════════════════════════════════════════════════════
+✨ L'APPLICATION EST MAINTENANT PRÊTE!
+═══════════════════════════════════════════════════════════════
+Tous les formulaires sont fonctionnels et reliés à PostgreSQL.
+Chaque ajout est instantanément sauvegardé dans la base.
+Pour tester:
+1. Lance run.bat
+2. Choisis une catégorie
+3. Remplis le formulaire
+4. Clique sur ENVOYER
+5. Vérifie le message de succès!
+═══════════════════════════════════════════════════════════════
