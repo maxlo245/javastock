@@ -2,60 +2,10 @@
 
 Projet de gestion de stocks pour une course (Java, Swing, PostgreSQL).
 
-## 📋 Description
+## Description
 
 JavaStock est une application de gestion complète permettant de gérer les stocks d'articles, les coureurs, les types d'épreuve et les réservations pour des événements sportifs. L'application utilise une interface graphique Swing moderne avec des formulaires client et une base de données PostgreSQL pour la persistence des données.
 
-## 🚀 Fonctionnalités
-
-### ✅ Gestion des Articles
-- Formulaire d'ajout avec libellé, catégorie (Textile/Boisson/Denrée Sèche) et quantité
-- Suppression logique des articles
-- Enregistrement direct en base de données
-
-### ✅ Gestion des Coureurs
-- Formulaire d'ajout avec nom et prénom
-- Validation des champs obligatoires
-- Sauvegarde instantanée
-
-### ✅ Gestion des Types d'Épreuve
-- Formulaire simple avec libellé
-- Ajout rapide des types (Marathon, 10km, Trail, etc.)
-
-### ✅ Gestion des Réservations
-- Formulaire complet avec sélection de coureur et type d'épreuve
-- Multi-sélection d'articles avec quantités
-- Date automatique
-- Validation complète avant envoi
-
-## 🗄️ Base de Données PostgreSQL
-
-### Configuration
-- **Base**: `javastock`
-- **Utilisateur**: `admin`
-- **Mot de passe**: `root`
-- **Port**: `5432`
-- **Host**: `localhost`
-
-### Tables
-```sql
-- article (id, libelle, categorie, quantite, suppression_logique)
-- coureur (id, nom, prenom)
-- type_epreuve (id, libelle)
-- reservation (id, date, coureur_id, type_epreuve_id)
-- reservation_article (reservation_id, article_id, quantite)
-```
-
-### Initialisation
-Le schéma SQL est disponible dans `db/schema.sql`. Pour initialiser la base :
-
-```bash
-psql -U admin -d javastock -f db/schema.sql
-```
-
-## 📁 Structure du Projet
-
-```
 javastock/
 ├── src/JavaStocks/          # Code source Java
 │   ├── MainMenu.java        # Menu principal
@@ -81,11 +31,14 @@ javastock/
 ├── run.bat                  # Script de lancement Windows
 ├── test_db.bat              # Script de test de la base
 └── pom.xml                  # Configuration Maven
+
 ```
 
-## 🛠️ Installation
+
+## Installation
 
 ### Prérequis
+
 - Java JDK 21 ou supérieur
 - PostgreSQL 12 ou supérieur
 - Maven (optionnel)
@@ -93,12 +46,14 @@ javastock/
 ### Étapes
 
 1. **Cloner le projet**
+
 ```bash
 git clone <url-du-repo>
 cd javastock
 ```
 
 2. **Configurer PostgreSQL**
+
 ```bash
 # Créer la base de données
 createdb -U admin javastock
@@ -110,11 +65,13 @@ psql -U admin -d javastock -f db/schema.sql
 3. **Compiler le projet**
 
 Avec Maven :
+
 ```bash
 mvn clean compile
 ```
 
 Ou manuellement :
+
 ```bash
 javac -cp "lib/postgresql-42.7.1.jar;src" -d bin/JavaStocks/JavaStocks src/JavaStocks/*.java
 ```
@@ -122,16 +79,18 @@ javac -cp "lib/postgresql-42.7.1.jar;src" -d bin/JavaStocks/JavaStocks src/JavaS
 4. **Lancer l'application**
 
 Windows :
+
 ```bash
 run.bat
 ```
 
 Manuel :
+
 ```bash
 java -cp "lib/postgresql-42.7.1.jar;bin/JavaStocks/JavaStocks" JavaStocks.MainMenu
 ```
 
-## 📖 Utilisation
+## Utilisation
 
 1. **Lancer l'application** en double-cliquant sur `run.bat` ou via la ligne de commande
 2. **Sélectionner une catégorie** dans le menu principal
@@ -140,16 +99,17 @@ java -cp "lib/postgresql-42.7.1.jar;bin/JavaStocks/JavaStocks" JavaStocks.MainMe
 5. Un **message de confirmation** s'affiche après chaque ajout réussi
 6. Le formulaire se **réinitialise automatiquement** pour permettre un nouvel ajout
 
-## 🎨 Captures d'écran
+## Captures d'écran
 
 L'application dispose d'une interface graphique moderne avec :
+
 - Titre en gras au-dessus de chaque formulaire
 - Labels alignés et champs de saisie larges
 - Bouton "Envoyer" en vert mis en évidence
 - Messages de confirmation et d'erreur clairs
 - Espacement agréable entre les éléments
 
-## 🧪 Tests
+## Tests
 
 Pour tester la connexion à la base de données et les opérations CRUD :
 
@@ -158,12 +118,13 @@ test_db.bat
 ```
 
 Ce script teste :
+
 - La connexion à PostgreSQL
 - Les opérations CRUD sur les coureurs
 - Les opérations CRUD sur les articles
 - Les opérations CRUD sur les types d'épreuve
 
-## 🔧 Technologies Utilisées
+## Technologies Utilisées
 
 - **Java 21** - Langage de programmation
 - **Swing** - Interface graphique
@@ -171,7 +132,7 @@ Ce script teste :
 - **JDBC** - Connexion base de données
 - **Maven** - Gestion des dépendances (optionnel)
 
-## 📝 Architecture
+## Architecture
 
 L'application suit une architecture en couches :
 
@@ -180,30 +141,30 @@ L'application suit une architecture en couches :
 3. **Couche DAO** (`*DAO.java`) - Accès aux données
 4. **Couche Base de Données** - PostgreSQL
 
-## 🚧 Fonctionnalités à Venir
+## Fonctionnalités à Venir
 
 - Article en rupture / réservation en attente
 - Consulter l'historique des réservations
 - Export des données en PDF/Excel
 - Statistiques et tableaux de bord
 
-## 👤 Auteur
+## Auteur
 
-**maxlo245**
+**Maxime LAURENT**
 
-## 📄 Licence
+## Licence
 
 MIT License
 
-## 🤝 Contribution
+## Contribution
 
 Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
 
-## 📞 Support
+## Support
 
 Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHub.
 
 ---
 
-**Date de dernière mise à jour**: 09/02/2026  
+**Date de dernière mise à jour**: 09/02/2026
 **Version**: 1.0.0

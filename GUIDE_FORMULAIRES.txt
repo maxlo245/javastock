@@ -2,11 +2,11 @@
 ║         JAVASTOCK - GUIDE D'UTILISATION                      ║
 ║              FORMULAIRES CLIENT                              ║
 ╚══════════════════════════════════════════════════════════════╝
-✅ IMPLEMENTATION TERMINEE - LES AJOUTS FONCTIONNENT!
+IMPLEMENTATION TERMINEE - LES AJOUTS FONCTIONNENT!
 ═══════════════════════════════════════════════════════════════
-📝 FORMULAIRES DISPONIBLES
+FORMULAIRES DISPONIBLES
 ═══════════════════════════════════════════════════════════════
-1️⃣  FORMULAIRE ARTICLE
+1. FORMULAIRE ARTICLE
    ┌─────────────────────────────────────────────┐
    │ • Libellé: [Champ texte]                    │
    │ • Catégorie: [Menu déroulant]               │
@@ -14,29 +14,21 @@
    │   - Boisson                                 │
    │   - Denrée Sèche                            │
    │ • Quantité: [Nombre]                        │
-   │ • Bouton: [ENVOYER] ✅                      │
+    │ • Bouton: [ENVOYER]                        │
    └─────────────────────────────────────────────┘
-   ➜ Enregistre directement dans la base
-   ➜ Message de confirmation après ajout
-   ➜ Formulaire réinitialisé automatiquement
-2️⃣  FORMULAIRE COUREUR
+2. FORMULAIRE COUREUR
    ┌─────────────────────────────────────────────┐
    │ • Nom: [Champ texte]                        │
    │ • Prénom: [Champ texte]                     │
-   │ • Bouton: [ENVOYER] ✅                      │
+    │ • Bouton: [ENVOYER]                        │
    └─────────────────────────────────────────────┘
-   ➜ Validation des champs obligatoires
-   ➜ Sauvegarde immédiate en base
-   ➜ Confirmation visuelle
-3️⃣  FORMULAIRE TYPE D'ÉPREUVE
+3. FORMULAIRE TYPE D'ÉPREUVE
    ┌─────────────────────────────────────────────┐
    │ • Libellé: [Champ texte]                    │
    │   (ex: Marathon, 10km, Trail...)            │
-   │ • Bouton: [ENVOYER] ✅                      │
+    │ • Bouton: [ENVOYER]                        │
    └─────────────────────────────────────────────┘
-   ➜ Simple et rapide
-   ➜ Enregistrement instantané
-4️⃣  FORMULAIRE RÉSERVATION (Complet)
+4. FORMULAIRE RÉSERVATION (Complet)
    ┌─────────────────────────────────────────────┐
    │ • Date: [Automatique - aujourd'hui]         │
    │ • Coureur: [Sélection liste]                │
@@ -45,13 +37,10 @@
    │ • Quantité: [Spinner +/-]                   │
    │ • [+ Ajouter cet article]                   │
    │ • Liste articles sélectionnés               │
-   │ • Bouton: [ENVOYER] ✅                      │
+    │ • Bouton: [ENVOYER]                        │
    └─────────────────────────────────────────────┘
-   ➜ Multi-articles possible
-   ➜ Affichage disponibilité en temps réel
-   ➜ Validation complète avant envoi
 ═══════════════════════════════════════════════════════════════
-🚀 COMMENT UTILISER
+COMMENT UTILISER
 ═══════════════════════════════════════════════════════════════
 ÉTAPE 1: Lancer l'application
    → Double-cliquez sur run.bat
