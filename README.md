@@ -1,37 +1,61 @@
 # JavaStock
 
-Projet de gestion de stocks pour une course (Java, Swing, PostgreSQL).
+Système de gestion de stock pour épreuves sportives (Java Swing + PostgreSQL).
 
 ## Description
 
-JavaStock est une application de gestion complète permettant de gérer les stocks d'articles, les coureurs, les types d'épreuve et les réservations pour des événements sportifs. L'application utilise une interface graphique Swing moderne avec des formulaires client et une base de données PostgreSQL pour la persistence des données.
+JavaStock est une application desktop complète permettant de gérer les stocks d'articles, les coureurs, les types d'épreuve et les réservations pour des événements sportifs. L'application dispose d'une interface graphique moderne avec thème sombre, un système d'alertes de stock en temps réel, et un historique complet des opérations base de données.
 
+## Fonctionnalités
+
+- **📦 Articles** — CRUD complet, tableau trié avec indicateurs de stock (OK / Stock bas / Rupture)
+- **🏃 Coureurs** — Gestion des coureurs participants
+- **🏆 Types d'épreuve** — Gestion des catégories d'épreuves sportives
+- **📋 Réservations** — Création avec association d'articles et vue détaillée
+- **⚠️ Alertes** — Dashboard des ruptures de stock avec réapprovisionnement direct
+- **📈 Historique** — Visualisation en temps réel des logs BDD avec filtrage et auto-refresh
+
+## Structure du projet
+
+```
 javastock/
-├── src/JavaStocks/          # Code source Java
-│   ├── MainMenu.java        # Menu principal
+├── src/JavaStocks/              # Code source Java
+│   ├── MainMenu.java            # Dashboard principal (point d'entrée)
 │   ├── DatabaseConnection.java  # Connexion PostgreSQL
-│   ├── ArticleMenu.java     # Formulaire articles
-│   ├── CoureurMenu.java     # Formulaire coureurs
-│   ├── TypeEpreuveMenu.java # Formulaire types d'épreuve
-│   ├── ReservationMenu.java # Formulaire réservations
-│   ├── Article.java         # Modèle Article
-│   ├── ArticleDAO.java      # DAO Article
-│   ├── Coureur.java         # Modèle Coureur
-│   ├── CoureurDAO.java      # DAO Coureur
-│   ├── TypeEpreuve.java     # Modèle TypeEpreuve
-│   ├── TypeEpreuveDAO.java  # DAO TypeEpreuve
-│   ├── Reservation.java     # Modèle Reservation
-│   ├── ReservationDAO.java  # DAO Reservation
-│   └── ReservationArticle.java  # Modèle ReservationArticle
-├── bin/JavaStocks/JavaStocks/  # Fichiers compilés
-├── lib/                     # Bibliothèques
+│   ├── DbLogger.java            # Logger centralisé BDD (console + mémoire)
+│   ├── ArticleMenu.java         # Interface articles (onglets liste/création)
+│   ├── CoureurMenu.java         # Interface coureurs
+│   ├── TypeEpreuveMenu.java     # Interface types d'épreuve
+│   ├── ReservationMenu.java     # Interface réservations
+│   ├── AlerteMenu.java          # Dashboard alertes et réapprovisionnement
+│   ├── HistoriqueMenu.java      # Visualiseur de logs BDD temps réel
+│   ├── Article.java             # Modèle Article
+│   ├── ArticleDAO.java          # DAO Article
+│   ├── Coureur.java             # Modèle Coureur
+│   ├── CoureurDAO.java          # DAO Coureur
+│   ├── TypeEpreuve.java         # Modèle TypeEpreuve
+│   ├── TypeEpreuveDAO.java      # DAO TypeEpreuve
+│   ├── Reservation.java         # Modèle Reservation
+│   ├── ReservationDAO.java      # DAO Reservation
+│   ├── ReservationArticle.java  # Modèle ReservationArticle
+│   ├── Boisson.java             # Sous-type Article
+│   ├── Textile.java             # Sous-type Article
+│   └── DenreeSeche.java         # Sous-type Article
+├── bin/JavaStocks/              # Fichiers compilés
+├── lib/                         # Bibliothèques
 │   └── postgresql-42.7.1.jar
-├── db/                      # Scripts SQL
+├── db/                          # Scripts SQL
 │   └── schema.sql
-├── run.bat                  # Script de lancement Windows
-├── test_db.bat              # Script de test de la base
-└── pom.xml                  # Configuration Maven
-
+├── database.sql                 # Schéma de création BDD
+├── reset_and_import.sql         # Reset + import de données
+├── import_data.sql              # Données de test
+├── docker-compose.yml           # PostgreSQL + pgAdmin via Docker
+├── run.bat                      # Lancer l'application
+├── stop.bat                     # Arrêter les processus orphelins
+├── test_db.bat                  # Tester la connexion BDD
+├── check_counts.bat             # Vérifier les comptages en BDD
+├── ouvrir_pgadmin.bat           # Ouvrir pgAdmin dans le navigateur
+└── pom.xml                      # Configuration Maven
 ```
 
 
@@ -39,114 +63,129 @@ javastock/
 
 ### Prérequis
 
-- Java JDK 21 ou supérieur
-- PostgreSQL 12 ou supérieur
-- Maven (optionnel)
+- **Java JDK 21** ou supérieur (testé avec Temurin 25)
+- **Docker** et **Docker Compose** (pour PostgreSQL + pgAdmin)
+- Ou bien PostgreSQL 15+ installé localement
 
-### Étapes
+### Avec Docker (recommandé)
 
 1. **Cloner le projet**
 
 ```bash
-git clone <url-du-repo>
+git clone https://github.com/maxlo245/javastock.git
 cd javastock
 ```
 
-2. **Configurer PostgreSQL**
+2. **Lancer PostgreSQL + pgAdmin**
 
 ```bash
-# Créer la base de données
-createdb -U admin javastock
-
-# Initialiser le schéma
-psql -U admin -d javastock -f db/schema.sql
+docker-compose up -d
 ```
 
-3. **Compiler le projet**
+Cela démarre :
+- PostgreSQL sur le port `5432` (user: `admin`, password: `root`, base: `javastocks`)
+- pgAdmin sur le port `8080` (email: `admin@admin.com`, password: `root`)
 
-Avec Maven :
+3. **Initialiser la base de données**
+
+Se connecter à la BDD via pgAdmin (`ouvrir_pgadmin.bat`) ou psql, puis exécuter :
+
+```sql
+-- Créer le schéma et importer les données de test
+\i reset_and_import.sql
+```
+
+4. **Compiler le projet**
 
 ```bash
-mvn clean compile
+javac -encoding UTF-8 -sourcepath src -cp "lib/postgresql-42.7.1.jar" -d "bin/JavaStocks" src/JavaStocks/MainMenu.java
 ```
 
-Ou manuellement :
-
-```bash
-javac -cp "lib/postgresql-42.7.1.jar;src" -d bin/JavaStocks/JavaStocks src/JavaStocks/*.java
-```
-
-4. **Lancer l'application**
-
-Windows :
+5. **Lancer l'application**
 
 ```bash
 run.bat
 ```
 
-Manuel :
-
-```bash
-java -cp "lib/postgresql-42.7.1.jar;bin/JavaStocks/JavaStocks" JavaStocks.MainMenu
-```
-
 ## Utilisation
 
-1. **Lancer l'application** en double-cliquant sur `run.bat` ou via la ligne de commande
-2. **Sélectionner une catégorie** dans le menu principal
-3. **Remplir le formulaire** avec les informations requises
-4. **Cliquer sur le bouton vert "Envoyer"** pour sauvegarder en base de données
-5. Un **message de confirmation** s'affiche après chaque ajout réussi
-6. Le formulaire se **réinitialise automatiquement** pour permettre un nouvel ajout
+### Dashboard principal
 
-## Captures d'écran
+Le menu principal affiche 6 boutons colorés donnant accès aux différentes fonctionnalités. La barre de statut en bas indique l'état de la connexion BDD.
 
-L'application dispose d'une interface graphique moderne avec :
+### Gestion des articles
 
-- Titre en gras au-dessus de chaque formulaire
-- Labels alignés et champs de saisie larges
-- Bouton "Envoyer" en vert mis en évidence
-- Messages de confirmation et d'erreur clairs
-- Espacement agréable entre les éléments
+- Onglet **Liste** : tableau triable avec statut de stock (✅ OK / ⚠ Stock bas / ⚠ Rupture)
+- Onglet **Créer** : formulaire avec libellé, catégorie (Textile/Boisson/DenreeSeche) et quantité
+- Suppression logique (l'article n'est pas effacé de la BDD)
 
-## Tests
+### Alertes de stock
 
-Pour tester la connexion à la base de données et les opérations CRUD :
+- **Compteurs** en haut : nombre de ruptures, stock bas, OK et total
+- **Réapprovisionnement** : sélectionner un article → cliquer "Réapprovisionner" → entrer la quantité à ajouter
+- **Filtre** : afficher uniquement les ruptures ou tous les articles
 
-```bash
-test_db.bat
-```
+### Historique des opérations
 
-Ce script teste :
+- **Log en temps réel** de toutes les requêtes SQL exécutées
+- **Filtrage** par niveau (SQL/OK/ERROR/CONN/INFO) et par recherche textuelle
+- **Auto-refresh** toutes les 3 secondes
+- Les lignes d'erreur sont affichées en rouge
 
-- La connexion à PostgreSQL
-- Les opérations CRUD sur les coureurs
-- Les opérations CRUD sur les articles
-- Les opérations CRUD sur les types d'épreuve
+### Raccourcis clavier
 
-## Technologies Utilisées
+| Raccourci | Action |
+|-----------|--------|
+| `Ctrl+Q`  | Quitter l'application |
+| `Escape`  | Fermer la fenêtre courante |
 
-- **Java 21** - Langage de programmation
-- **Swing** - Interface graphique
-- **PostgreSQL 17** - Base de données
-- **JDBC** - Connexion base de données
-- **Maven** - Gestion des dépendances (optionnel)
+## Scripts utilitaires
+
+| Script | Description |
+|--------|-------------|
+| `run.bat` | Compile et lance l'application |
+| `stop.bat` | Tue les processus Java orphelins |
+| `test_db.bat` | Teste la connexion et les opérations CRUD |
+| `check_counts.bat` | Affiche le nombre d'enregistrements par table |
+| `ouvrir_pgadmin.bat` | Ouvre pgAdmin dans le navigateur |
+
+## Technologies utilisées
+
+- **Java 21+** — Langage de programmation (compatible JDK 25)
+- **Swing + Nimbus** — Interface graphique avec thème moderne
+- **PostgreSQL 15** — Base de données relationnelle
+- **JDBC** — Connexion base de données (driver PostgreSQL 42.7.1)
+- **Docker Compose** — Conteneurisation BDD + pgAdmin
+- **Maven** — Gestion des dépendances (optionnel)
 
 ## Architecture
 
 L'application suit une architecture en couches :
 
-1. **Couche Présentation** (`*Menu.java`) - Formulaires Swing
-2. **Couche Métier** (`*.java` modèles) - Objets métier
-3. **Couche DAO** (`*DAO.java`) - Accès aux données
-4. **Couche Base de Données** - PostgreSQL
+1. **Couche Présentation** (`*Menu.java`) — Interfaces Swing avec onglets, tableaux triables, formulaires
+2. **Couche Métier** (`*.java` modèles) — Objets métier (Article, Coureur, TypeEpreuve, Reservation)
+3. **Couche DAO** (`*DAO.java`) — Accès aux données avec logging intégré
+4. **Couche Infrastructure** — `DatabaseConnection` (singleton JDBC) + `DbLogger` (logs centralisés)
+5. **Base de données** — PostgreSQL avec contraintes CHECK, clés étrangères, suppression logique
 
-## Fonctionnalités à Venir
+### Schéma de la base de données
 
-- Article en rupture / réservation en attente
-- Consulter l'historique des réservations
+| Table | Description |
+|-------|-------------|
+| `Coureur` | Coureurs (nom, prénom) |
+| `TypeEpreuve` | Types d'épreuve (libellé) |
+| `Article` | Articles avec catégorie (Textile/Boisson/DenreeSeche), quantité et suppression logique |
+| `Textile` | Spécialisation Article (taille) |
+| `Boisson` | Spécialisation Article (volume) |
+| `DenreeSeche` | Spécialisation Article (poids) |
+| `Reservation` | Réservations (date, coureur, type d'épreuve) |
+| `ReservationArticle` | Articles réservés (quantité par article) |
+
+## Fonctionnalités à venir
+
 - Export des données en PDF/Excel
-- Statistiques et tableaux de bord
+- Statistiques et graphiques
+- Gestion multi-utilisateurs
 
 ## Auteur
 
@@ -166,5 +205,5 @@ Pour toute question ou problème, veuillez ouvrir une issue sur le dépôt GitHu
 
 ---
 
-**Date de dernière mise à jour**: 09/02/2026
-**Version**: 1.0.0
+**Date de dernière mise à jour** : 13/02/2026
+**Version** : 2.0.0
