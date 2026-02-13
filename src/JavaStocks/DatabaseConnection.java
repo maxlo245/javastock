@@ -11,10 +11,15 @@ public class DatabaseConnection {
         if (connection == null || connection.isClosed()) {
             try {
                 Class.forName("org.postgresql.Driver");
+                DbLogger.info("Tentative de connexion à " + URL + " (user=" + USER + ")");
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Connexion etablie avec succes!");
+                DbLogger.connection("Connexion établie avec succès à " + URL);
             } catch (ClassNotFoundException e) {
-                throw new SQLException("Driver PostgreSQL non trouve.", e);
+                DbLogger.error("DatabaseConnection", "getConnection", e);
+                throw new SQLException("Driver PostgreSQL non trouvé.", e);
+            } catch (SQLException e) {
+                DbLogger.error("DatabaseConnection", "getConnection", e);
+                throw e;
             }
         }
         return connection;
@@ -23,9 +28,9 @@ public class DatabaseConnection {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Connexion fermee.");
+                DbLogger.disconnection("Connexion fermée.");
             } catch (SQLException e) {
-                System.err.println("Erreur fermeture: " + e.getMessage());
+                DbLogger.error("DatabaseConnection", "closeConnection", e);
             }
         }
     }

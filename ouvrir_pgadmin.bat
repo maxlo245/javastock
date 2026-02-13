@@ -1,6 +1,12 @@
 @echo off
-REM Lance pgAdmin dans le navigateur par défaut
-start http://localhost:8080
-
-echo Ouverture de pgAdmin...
+title JavaStock - pgAdmin
+REM Lance pgAdmin dans le navigateur par defaut
+echo ============================================
+echo   JavaStock - Ouverture pgAdmin
+echo ============================================
+echo.
+start "" http://localhost:8080
+echo pgAdmin ouvert dans le navigateur.
+echo Cette fenetre peut etre fermee en toute securite.
+echo.
 pause
