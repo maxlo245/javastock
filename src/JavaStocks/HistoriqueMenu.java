@@ -64,7 +64,7 @@ public class HistoriqueMenu {
         filterBar.setBackground(MainMenu.LIGHT_BG);
         filterBar.setBorder(BorderFactory.createEmptyBorder(5, 15, 0, 15));
 
-        JLabel lblFiltre = new JLabel("Filtrer :");
+        JLabel lblFiltre = new JLabel("Niveau :");
         lblFiltre.setFont(MainMenu.LABEL_FONT);
         filterBar.add(lblFiltre);
 
@@ -72,6 +72,17 @@ public class HistoriqueMenu {
         JComboBox<String> cboNiveau = new JComboBox<>(niveaux);
         cboNiveau.setFont(MainMenu.LABEL_FONT);
         filterBar.add(cboNiveau);
+
+        JLabel lblCategorie = new JLabel("Cat\u00e9gorie :");
+        lblCategorie.setFont(MainMenu.LABEL_FONT);
+        filterBar.add(lblCategorie);
+
+        String[] categories = new String[DbLogger.getCategories().length + 1];
+        categories[0] = "Toutes";
+        System.arraycopy(DbLogger.getCategories(), 0, categories, 1, DbLogger.getCategories().length);
+        JComboBox<String> cboCategorie = new JComboBox<>(categories);
+        cboCategorie.setFont(MainMenu.LABEL_FONT);
+        filterBar.add(cboCategorie);
 
         JTextField txtRecherche = new JTextField(20);
         txtRecherche.setFont(MainMenu.LABEL_FONT);
@@ -87,7 +98,7 @@ public class HistoriqueMenu {
         filterBar.add(btnClear);
 
         // === Tableau ===
-        String[] colonnes = {"Heure", "Niveau", "Source", "Message", "Paramètres"};
+        String[] colonnes = {"Heure", "Niveau", "Cat\u00e9gorie", "Source", "Message", "Param\u00e8tres"};
         DefaultTableModel tableModel = new DefaultTableModel(colonnes, 0) {
             public boolean isCellEditable(int row, int col) { return false; }
         };
@@ -104,10 +115,11 @@ public class HistoriqueMenu {
 
         // Largeurs de colonnes
         table.getColumnModel().getColumn(0).setPreferredWidth(130);  // Heure
-        table.getColumnModel().getColumn(1).setPreferredWidth(60);   // Niveau
-        table.getColumnModel().getColumn(2).setPreferredWidth(160);  // Source
-        table.getColumnModel().getColumn(3).setPreferredWidth(320);  // Message
-        table.getColumnModel().getColumn(4).setPreferredWidth(200);  // Params
+        table.getColumnModel().getColumn(1).setPreferredWidth(55);   // Niveau
+        table.getColumnModel().getColumn(2).setPreferredWidth(100);  // Catégorie
+        table.getColumnModel().getColumn(3).setPreferredWidth(150);  // Source
+        table.getColumnModel().getColumn(4).setPreferredWidth(280);  // Message
+        table.getColumnModel().getColumn(5).setPreferredWidth(180);  // Params
 
         // Renderer coloré pour le niveau
         table.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer() {
@@ -149,6 +161,49 @@ public class HistoriqueMenu {
             }
         });
 
+        // Renderer coloré pour la catégorie
+        table.getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable t, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, column);
+                setHorizontalAlignment(SwingConstants.CENTER);
+                if (!isSelected) {
+                    String cat = value != null ? value.toString() : "";
+                    switch (cat) {
+                        case "Articles":
+                            c.setForeground(MainMenu.PRIMARY);
+                            c.setBackground(new Color(232, 245, 253));
+                            break;
+                        case "Coureurs":
+                            c.setForeground(new Color(142, 68, 173));
+                            c.setBackground(new Color(245, 238, 248));
+                            break;
+                        case "\u00c9preuves":
+                            c.setForeground(MainMenu.WARNING);
+                            c.setBackground(new Color(254, 249, 231));
+                            break;
+                        case "R\u00e9servations":
+                            c.setForeground(MainMenu.SUCCESS);
+                            c.setBackground(new Color(234, 250, 241));
+                            break;
+                        case "Utilisateurs":
+                            c.setForeground(MainMenu.DANGER);
+                            c.setBackground(new Color(253, 237, 236));
+                            break;
+                        case "Syst\u00e8me":
+                            c.setForeground(new Color(100, 100, 100));
+                            c.setBackground(new Color(245, 245, 245));
+                            break;
+                        default:
+                            c.setForeground(MainMenu.TEXT_DARK);
+                            c.setBackground(Color.WHITE);
+                    }
+                }
+                return c;
+            }
+        });
+
         // Renderer pour les lignes ERROR (texte rouge)
         DefaultTableCellRenderer errorAwareRenderer = new DefaultTableCellRenderer() {
             @Override
@@ -170,9 +225,9 @@ public class HistoriqueMenu {
             }
         };
         table.getColumnModel().getColumn(0).setCellRenderer(errorAwareRenderer);
-        table.getColumnModel().getColumn(2).setCellRenderer(errorAwareRenderer);
         table.getColumnModel().getColumn(3).setCellRenderer(errorAwareRenderer);
         table.getColumnModel().getColumn(4).setCellRenderer(errorAwareRenderer);
+        table.getColumnModel().getColumn(5).setCellRenderer(errorAwareRenderer);
 
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
@@ -216,6 +271,7 @@ public class HistoriqueMenu {
                 tableModel.addRow(new Object[]{
                     entry.getTimestampStr(),
                     entry.level,
+                    entry.category,
                     entry.source,
                     entry.message,
                     entry.detail != null ? entry.detail : ""
@@ -233,6 +289,7 @@ public class HistoriqueMenu {
         // === Filtrage ===
         Runnable appliquerFiltre = () -> {
             String niveau = (String) cboNiveau.getSelectedItem();
+            String categorie = (String) cboCategorie.getSelectedItem();
             String texte = txtRecherche.getText().trim().toLowerCase();
 
             sorter.setRowFilter(new RowFilter<DefaultTableModel, Integer>() {
@@ -242,6 +299,11 @@ public class HistoriqueMenu {
                     if (!"Tous".equals(niveau)) {
                         String lvl = entry.getStringValue(1);
                         if (!niveau.equals(lvl)) return false;
+                    }
+                    // Filtre par catégorie
+                    if (!"Toutes".equals(categorie)) {
+                        String cat = entry.getStringValue(2);
+                        if (!categorie.equals(cat)) return false;
                     }
                     // Filtre par texte
                     if (!texte.isEmpty()) {
@@ -257,6 +319,7 @@ public class HistoriqueMenu {
         };
 
         cboNiveau.addActionListener(e -> appliquerFiltre.run());
+        cboCategorie.addActionListener(e -> appliquerFiltre.run());
         txtRecherche.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { appliquerFiltre.run(); }
             public void removeUpdate(DocumentEvent e) { appliquerFiltre.run(); }

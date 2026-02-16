@@ -28,13 +28,22 @@ public class DbLogger {
 
     private static boolean enabled = true;
 
+    /** Catégories de logs */
+    public static final String CAT_ARTICLES     = "Articles";
+    public static final String CAT_COUREURS     = "Coureurs";
+    public static final String CAT_EPREUVES     = "\u00c9preuves";
+    public static final String CAT_RESERVATIONS = "R\u00e9servations";
+    public static final String CAT_UTILISATEURS = "Utilisateurs";
+    public static final String CAT_SYSTEME      = "Syst\u00e8me";
+
     /** Entrée de log stockée en mémoire */
     public static class LogEntry {
         public final LocalDateTime timestamp;
-        public final String level;    // SQL, CONN, INFO, ERROR
-        public final String source;   // ex: ArticleDAO.creer
-        public final String message;  // texte brut
-        public final String detail;   // paramètres ou résultat
+        public final String level;      // SQL, CONN, INFO, ERROR, OK, DISC
+        public final String category;   // Articles, Coureurs, etc.
+        public final String source;     // ex: ArticleDAO.creer
+        public final String message;    // texte brut
+        public final String detail;     // paramètres ou résultat
 
         public LogEntry(String level, String source, String message, String detail) {
             this.timestamp = LocalDateTime.now();
@@ -42,11 +51,39 @@ public class DbLogger {
             this.source = source;
             this.message = message;
             this.detail = detail;
+            this.category = resolveCategory(source);
+        }
+
+        public LogEntry(String level, String source, String message, String detail, String category) {
+            this.timestamp = LocalDateTime.now();
+            this.level = level;
+            this.source = source;
+            this.message = message;
+            this.detail = detail;
+            this.category = category;
         }
 
         public String getTimestampStr() {
             return timestamp.format(FMT_FULL);
         }
+    }
+
+    /** Résout la catégorie à partir du nom de source (DAO) */
+    private static String resolveCategory(String source) {
+        if (source == null) return CAT_SYSTEME;
+        String s = source.toLowerCase();
+        if (s.contains("articledao"))      return CAT_ARTICLES;
+        if (s.contains("coureurdao"))      return CAT_COUREURS;
+        if (s.contains("typeepreuvedao"))  return CAT_EPREUVES;
+        if (s.contains("reservationdao"))  return CAT_RESERVATIONS;
+        if (s.contains("utilisateurdao"))  return CAT_UTILISATEURS;
+        if (s.contains("database"))        return CAT_SYSTEME;
+        return CAT_SYSTEME;
+    }
+
+    /** Retourne toutes les catégories disponibles */
+    public static String[] getCategories() {
+        return new String[]{ CAT_ARTICLES, CAT_COUREURS, CAT_EPREUVES, CAT_RESERVATIONS, CAT_UTILISATEURS, CAT_SYSTEME };
     }
 
     /** Historique en mémoire (max 500 entrées) */
@@ -92,7 +129,7 @@ public class DbLogger {
                 + GRAY + " → " + RESET + sql);
     }
 
-    /** Log les paramètres d'une requête */
+    /** Log les paramètres d'une requête (masque les données sensibles) */
     public static void params(String... params) {
         StringBuilder paramsStr = new StringBuilder();
         for (int i = 0; i < params.length; i++) {
@@ -104,7 +141,7 @@ public class DbLogger {
             LogEntry last = history.get(history.size() - 1);
             if ("SQL".equals(last.level)) {
                 history.set(history.size() - 1,
-                    new LogEntry(last.level, last.source, last.message, paramsStr.toString()));
+                    new LogEntry(last.level, last.source, last.message, paramsStr.toString(), last.category));
             }
         }
         if (!enabled) return;

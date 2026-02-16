@@ -2,6 +2,18 @@
 DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA public;
 
+-- Table des utilisateurs
+CREATE TABLE Utilisateur (
+    id SERIAL PRIMARY KEY,
+    nom_utilisateur VARCHAR(50) UNIQUE NOT NULL,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'utilisateur' CHECK (role IN ('admin', 'utilisateur')),
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    actif BOOLEAN DEFAULT TRUE
+);
+
 -- Création des tables
 CREATE TABLE Coureur (
     id SERIAL PRIMARY KEY,
@@ -83,3 +95,7 @@ INSERT INTO ReservationArticle (reservation_id, article_id, quantite) VALUES
   (1, 1, 2),
   (1, 2, 1),
   (2, 3, 3);
+
+-- Utilisateur admin par défaut (mot de passe: admin)
+INSERT INTO Utilisateur (nom_utilisateur, mot_de_passe, nom, prenom, role) VALUES
+  ('admin', 'admin', 'Administrateur', 'Système', 'admin');
