@@ -3,9 +3,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 public class DatabaseConnection {
-    private static final String URL = "jdbc:postgresql://localhost:5432/javastocks";
-    private static final String USER = "admin";
-    private static final String PASSWORD = "root";
+    private static final String URL = System.getenv("DB_URL") != null 
+        ? System.getenv("DB_URL") 
+        : "jdbc:postgresql://localhost:5432/javastocks";
+    private static final String USER = System.getenv("DB_USER") != null 
+        ? System.getenv("DB_USER") 
+        : "admin";
+    private static final String PASSWORD = System.getenv("DB_PASSWORD") != null 
+        ? System.getenv("DB_PASSWORD") 
+        : "root";
     private static Connection connection = null;
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {

@@ -1,0 +1,17 @@
+target/
+bin/
+.git
+.gitignore
+.idea
+.vscode
+*.log
+*.swp
+*.swo
+*~
+.DS_Store
+node_modules
+.env
+.env.local
+*.md
+README*
+LICENSE
