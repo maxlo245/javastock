@@ -1,7 +1,6 @@
-version: '3.8'
 services:
   db:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: javastock-postgres
     environment:
       POSTGRES_DB: javastocks
@@ -11,6 +10,27 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./database.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./import_data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d javastocks"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: javastock-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/javastocks
+      DB_USER: admin
+      DB_PASSWORD: root
+    ports:
+      - "8080:8080"
+    restart: on-failure:5
 
   mysql:
     image: mysql:8.0
@@ -39,13 +59,13 @@ services:
       - mysql
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
-      - "8081:80"
+  - "8081:80"
     depends_on:
       - db
 
