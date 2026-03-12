@@ -28,6 +28,12 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import java.awt.Desktop;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import javax.swing.Timer;
+
 public class MainMenu {
 
     // === Palette de couleurs partagée ===
@@ -231,8 +237,65 @@ public class MainMenu {
             public void mouseExited(MouseEvent e)  { btnDeconnexion.setForeground(WARNING); }
         });
 
+        // === Bouton PgAdmin avec voyant d'état ===
+        JPanel pgAdminPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        pgAdminPanel.setBackground(DARK);
+        JLabel pgAdminStatus = new JLabel("●");
+        pgAdminStatus.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        pgAdminStatus.setForeground(Color.GRAY); // Par défaut, état inconnu
+        JButton btnPgAdmin = new JButton("PgAdmin");
+        btnPgAdmin.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnPgAdmin.setForeground(TEXT_LIGHT);
+        btnPgAdmin.setBackground(new Color(52, 152, 219));
+        btnPgAdmin.setFocusPainted(false);
+        btnPgAdmin.setBorderPainted(false);
+        btnPgAdmin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnPgAdmin.setOpaque(true);
+        btnPgAdmin.setPreferredSize(new Dimension(90, 28));
+        btnPgAdmin.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btnPgAdmin.setBackground(new Color(41, 128, 185)); }
+            public void mouseExited(MouseEvent e)  { btnPgAdmin.setBackground(new Color(52, 152, 219)); }
+        });
+        btnPgAdmin.setToolTipText("Ouvrir PgAdmin (http://localhost:8080)");
+        btnPgAdmin.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Impossible d'ouvrir PgAdmin :\n" + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        pgAdminPanel.add(pgAdminStatus);
+        pgAdminPanel.add(btnPgAdmin);
+
+        // Timer pour vérifier l'état de PgAdmin toutes les 3 secondes
+        Timer pgAdminTimer = new Timer(3000, evt -> {
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    URL url = new URL("http://localhost:8080");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(700);
+                    conn.setReadTimeout(700);
+                    conn.setRequestMethod("HEAD");
+                    int code = conn.getResponseCode();
+                    if (code >= 200 && code < 400) {
+                        pgAdminStatus.setForeground(SUCCESS); // Vert
+                        pgAdminStatus.setToolTipText("PgAdmin est accessible");
+                    } else {
+                        pgAdminStatus.setForeground(DANGER); // Rouge
+                        pgAdminStatus.setToolTipText("PgAdmin inaccessible");
+                    }
+                } catch (Exception ex) {
+                    pgAdminStatus.setForeground(DANGER); // Rouge
+                    pgAdminStatus.setToolTipText("PgAdmin inaccessible");
+                }
+            });
+        });
+        pgAdminTimer.setRepeats(true);
+        pgAdminTimer.start();
+
         userInfo.add(lblUserIcon);
         userInfo.add(lblUserStatus);
+        userInfo.add(pgAdminPanel);
         userInfo.add(btnDeconnexion);
 
         JButton btnQuitter = createStyledButton("  Quitter  ", DANGER, new Color(192, 57, 43));
