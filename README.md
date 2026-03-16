@@ -168,18 +168,9 @@ L'application suit une architecture en couches :
 4. **Couche Infrastructure** — `DatabaseConnection` (singleton JDBC) + `DbLogger` (logs centralisés)
 5. **Base de données** — PostgreSQL avec contraintes CHECK, clés étrangères, suppression logique
 
-### Schéma de la base de données
+### Schéma de la base de données (MCD)
 
-| Table | Description |
-|-------|-------------|
-| `Coureur` | Coureurs (nom, prénom) |
-| `TypeEpreuve` | Types d'épreuve (libellé) |
-| `Article` | Articles avec catégorie (Textile/Boisson/DenreeSeche), quantité et suppression logique |
-| `Textile` | Spécialisation Article (taille) |
-| `Boisson` | Spécialisation Article (volume) |
-| `DenreeSeche` | Spécialisation Article (poids) |
-| `Reservation` | Réservations (date, coureur, type d'épreuve) |
-| `ReservationArticle` | Articles réservés (quantité par article) |
+![MCD JavaStock](diagramme/MCD.png)
 
 ## Fonctionnalités à venir
 
